@@ -1,28 +1,23 @@
-{{/* layouts/partials/sections/testimonial.html */}}
-{{ $style := index . "style" | default "slider_single" }} {{/* Or however you want to handle style */}}
+    {{/* layouts/partials/sections/testimonial.html */}}
+    {{ $sectionData := . }} {{/* Store the top-level section data context */}}
 
-<section id="{{ index . "id" | default "testimonial" }}" class="testimonial pa3 pa5-ns tc">
-  <div class="container mw7 center">
-    {{ with (index . "title") }}<h2 class="f2 mb4">{{ . }}</h2>{{ end }}
-    
-    {{/* For a "slider_single", we just display the first one. 
-         If you had an array of testimonials, you'd range over them.
-         Your current JSON has quote, author, company, avatarUrl at the top level of the testimonial section data */}}
-    
-    <blockquote class="mh0 pb3">
-      {{ with (index . "avatarUrl") }}
-        <img src="{{ . }}" alt="Avatar for {{ index $. "author" | default "testimonial author" }}" class="br-100 h3 w3 dib ba b--black-05 pa2" />
-      {{ end }}
-      {{ with (index . "quote") }}
-        <p class="f3 lh-copy measure-narrow center">“{{ . }}”</p>
-      {{ end }}
-      {{ with (index . "author") }}
-        <cite class="f6 ttu tracked fs-normal">
-          {{ . }}{{ with (index $. "company") }}, <span class="fw2 normal-case">{{ . }}</span>{{ end }}
-        </cite>
-      {{ end }}
-    </blockquote>
-    
-    {{/* If you implement a slider, the structure would be different and likely involve JS */}}
-  </div>
-</section>
+    <section id="{{ index $sectionData "id" | default "testimonial" }}" class="testimonial pa3 pa5-ns tc">
+      <div class="container mw7 center">
+        {{ with (index $sectionData "Title") }}<h2 class="f2 mb4">{{ . }}</h2>{{ end }}
+        
+        <blockquote class="mh0 pb3">
+          {{ with (index $sectionData "AvatarURL") }}
+            <img src="{{ . }}" alt="Avatar for {{ index $sectionData "Author" | default "testimonial author" }}" class="br-100 h3 w3 dib ba b--black-05 pa2" />
+          {{ end }}
+          {{ with (index $sectionData "Quote") }}
+            <p class="f3 lh-copy measure-narrow center">“{{ . }}”</p>
+          {{ end }}
+          {{ with (index $sectionData "Author") }}
+            <cite class="f6 ttu tracked fs-normal">
+              {{ . }}{{ with (index $sectionData "Company") }}, <span class="fw2 normal-case">{{ . }}</span>{{ end }}
+            </cite>
+          {{ end }}
+        </blockquote>
+        
+      </div>
+    </section>
