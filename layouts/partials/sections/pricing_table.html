@@ -1,0 +1,60 @@
+{{/* layouts/partials/sections/pricing_table.html */}}
+{{ $sectionData := . }}
+
+<section id="{{ index $sectionData "id" | default "pricing" }}" class="pricing-table pa3 pa5-ns bg-light-gray">
+  <div class="container mw9 center">
+    {{ with (index $sectionData "Title") }}
+      <h2 class="f2 tc mb4">{{ . }}</h2>
+    {{ end }}
+    {{ with (index $sectionData "Description") }} {{/* In case you add a description later */}}
+      <p class="f4 tc measure-wide center lh-copy mb5">{{ . }}</p>
+    {{ end }}
+
+    <div class="flex-ns flex-wrap justify-center">
+      {{ range (index $sectionData "Plans") }}
+        {{ $planData := . }} {{/* Current plan map */}}
+        <div class="w-100 w-third-ns pa3">
+          <div class="br2 ba b--black-10 pa4 tc {{ if (index $planData "ispopular") }}b--blue bw2{{ end }}">
+            {{ with (index $planData "name") }}
+              <h3 class="f3 mb3">{{ . }}</h3>
+            {{ end }}
+            {{ with (index $planData "price") }}
+              <p class="f2 fw6 mb3">{{ . }}</p>
+            {{ end }}
+            
+            {{ with (index $planData "features") }}
+              <ul class="list pl0 mb4">
+                {{ range . }}
+                  <li class="lh-copy pv1">{{ . }}</li>
+                {{ end }}
+              </ul>
+            {{ end }}
+
+            {{/* Handling CTA - check if CtaText and CtaUrl exist directly */}}
+            {{ $ctaText := "" }}{{ $ctaUrl := "" }}
+            {{ if reflect.IsMap $planData }}
+                {{ $ctaText = index $planData "CtaText" }} {{/* Assumes CtaText is a direct field */}}
+                {{ $ctaUrl = index $planData "CtaUrl" }}   {{/* Assumes CtaUrl is a direct field */}}
+            {{ end }}
+
+            {{/* Or, if your original JSON structure was cta.text, cta.url and your Go struct reflects that:
+            {{ $ctaMap := index $planData "Cta" }} 
+            {{ if $ctaMap }}
+                {{ $ctaText = index $ctaMap "Text" }}
+                {{ $ctaUrl = index $ctaMap "Url" }}
+            {{ end }}
+            */}}
+
+            {{ if and $ctaText $ctaUrl }}
+              <a href="{{ $ctaUrl }}" class="f6 link dim br-pill ph3 pv2 mb2 dib {{ if (index $planData "ispopular") }}white bg-blue{{ else }}white bg-dark-gray{{ end }}">
+                {{ $ctaText }}
+              </a>
+            {{ else }}
+              {{/* Fallback or no button if CTA data is missing */}}
+            {{ end }}
+          </div>
+        </div>
+      {{ end }}
+    </div>
+  </div>
+</section>
