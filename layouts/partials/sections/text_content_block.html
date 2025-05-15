@@ -4,20 +4,19 @@
   
   <h4 style="color: black;">Section Title from Param: {{ .title | default "NO TITLE PARAM" }}</h4>
 
-  <h4 style="color: black;">Raw .content_html (via printf "%#v"):</h4>
-  <pre style="background-color:#eee;border:1px solid #ccc;padding:10px;white-space:pre-wrap;word-wrap:break-word; color: black;">{{ printf "%#v" .content_html }}</pre>
+  <h4 style="color: black;">Raw .ContentHTML (via printf "%#v"):</h4>
+  <pre style="background-color:#eee;border:1px solid #ccc;padding:10px;white-space:pre-wrap;word-wrap:break-word; color: black;">{{ printf "%#v" .ContentHTML }}</pre>
   
-  <h4 style="color: black;">.content_html piped to | safeHTML :</h4>
+  <h4 style="color: black;">.ContentHTML piped to | safeHTML :</h4>
   <div style="border:2px solid green; padding:10px; background-color: white; color: black;">
-    {{ .content_html | safeHTML }}
+    {{ .ContentHTML | safeHTML }}
   </div>
 
-  <h4 style="color: black;">Checking if .content_html is nil:</h4>
-  <p style="color: black;">Is .content_html nil? {{ if not .content_html }}YES, it's nil or empty.{{ else }}NO, it has a value.{{ end }}</p>
+  <h4 style="color: black;">Checking if .ContentHTML is nil:</h4>
+  <p style="color: black;">Is .ContentHTML nil? {{ if not .ContentHTML }}YES, it's nil or empty.{{ else }}NO, it has a value.{{ end }}</p>
 
-  <h4 style="color: black;">Directly outputting .content_html WITHOUT safeHTML (will likely show escaped HTML if it's a string):</h4>
+  <h4 style="color: black;">Directly outputting .ContentHTML WITHOUT safeHTML (will likely show escaped HTML if it's a string):</h4>
   <div style="border:2px solid orange; padding:10px; background-color: white; color: black;">
-    {{ .content_html }}
+    {{ .ContentHTML }}
   </div>
-
 </section>
