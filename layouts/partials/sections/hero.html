@@ -1,0 +1,24 @@
+   {{/* layouts/partials/sections/hero.html */}}
+   {{ $background_color := .backgroundColor | default "bg-light-gray" }} {{/* Default background if not specified */}}
+   <section id="{{ .id | default "hero" }}" class="hero {{ .style | default "image_left" }} {{ $background_color }} pa3 pa5-ns tc tl-ns">
+     <div class="container mw9 center">
+       <div class="flex-ns items-center">
+         <div class="w-100 w-50-ns pa3">
+           {{ with .headline }}<h1 class="f1-ns f2 lh-title">{{ . }}</h1>{{ end }}
+           {{ with .subheadline }}<p class="f4 lh-copy measure">{{ . }}</p>{{ end }}
+           {{ with .cta }}
+             {{ if and .text .url }}
+               <a href="{{ .url }}" class="f6 link dim br-pill ph3 pv2 mb2 dib white {{ .style | default "bg-blue" }}">{{ .text }}</a>
+             {{ end }}
+           {{ end }}
+         </div>
+         <div class="w-100 w-50-ns pa3 tc">
+           {{ with .image }}
+             {{ if and .url .alt }}
+               <img src="{{ .url }}" alt="{{ .alt }}" class="br-100 dib" style="max-width: 300px; height: auto;"> {{/* Example styling */}}
+             {{ end }}
+           {{ end }}
+         </div>
+       </div>
+     </div>
+   </section>
