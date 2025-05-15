@@ -1,0 +1,11 @@
+{{/* Section Type: hero_ananke_special */}}
+{{/* Expects: .headline, .subheadline (optional), .ctaText (optional), .ctaUrl (optional), .imageUrl (optional), .imageAlt (optional), .id (optional) */}}
+<section id="{{ .id | default (.type | anchorize) }}" class="hero {{ .type }} pv5 ph3 tc-l bg-center cover {{ if not .imageUrl }}bg-light-gray{{ end }}" {{ with .imageUrl }}style="background-image: url('{{ . | safeURL }}');"{{ end }}>
+  <div class="mw8 center pa3 {{ if .imageUrl }}bg-black-60 br3{{ end }}"> {{/* Added bg-black-60 for text visibility on image */}}
+    <h2 class="f1-l f2 lh-solid {{ if .imageUrl }}white{{ else }}near-black{{ end }} tracked-tight mv0">{{ .headline | default "Missing Headline" }}</h2>
+    {{ with .subheadline }}<p class="f4 lh-copy {{ if $.imageUrl }}white o-90{{ else }}mid-gray{{ end }} measure-wide center">{{ . }}</p>{{ end }}
+    {{ if and .ctaText .ctaUrl }}
+      <a class="f5 link dim br-pill ph3 pv2 mv3 dib {{ if .imageUrl }}white bg-primary{{ else }}white bg-primary{{ end }}" href="{{ .ctaUrl | safeURL }}">{{ .ctaText }}</a>
+    {{ end }}
+  </div>
+</section>
