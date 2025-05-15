@@ -11,7 +11,15 @@
         <li>Hardcoded item 1</li>
         <li>Hardcoded item 2</li>
       </ul>
-      <p>Content from variable: {{ .content_html | safeHTML }}</p> {{/* Keep this for comparison */}}
+      <hr>
+      <p><strong>Attempting to render content_html:</strong></p>
+      <p>Value of .content_html (raw, before safeHTML):</p>
+      <pre style="background-color: #f0f0f0; border: 1px solid #ccc; padding: 10px; white-space: pre-wrap; word-wrap: break-word;">{{ .content_html }}</pre>
+      <p>Value of .content_html (after safeHTML attempt):</p>
+      <div style="border: 1px dashed blue; padding: 10px;">
+        {{ .content_html | safeHTML }}
+      </div>
+      <hr>
     </div>
   </div>
 </section>
