@@ -1,4 +1,6 @@
    {{/* layouts/partials/sections/features.html */}}
+<p style="background-color: pink; color: black; padding: 5px;">DEBUG: Received style = [{{ .style }}], Received id = [{{ .id }}]</p>
+
    <section id="{{ .id | default "features" }}" class="features pa3 pa5-ns">
      <div class="container mw9 center">
        {{ with .title }}<h2 class="f2 tc mb4">{{ . }}</h2>{{ end }}
