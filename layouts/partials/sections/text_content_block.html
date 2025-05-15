@@ -5,8 +5,8 @@
     {{ with .title }}
       <h2 class="f2 tc-l tracked-tight near-black mv0 mb3">{{ . }}</h2>
     {{ end }}
-    <div class="post-content lh-copy mid-gray measure-wide">
-      {{/* Using .Inner from a shortcode is one way, but here we have .content_html */}}
+    {{/* Attempt to use Ananke's prose styling classes */}}
+    <div class="prose ethanwaggoner-prose nested-copy-line-height nested-links mid-gray">
       {{ .content_html | safeHTML }}
     </div>
   </div>
