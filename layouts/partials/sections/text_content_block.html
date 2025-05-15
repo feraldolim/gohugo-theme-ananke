@@ -1,22 +1,23 @@
-{{/* layouts/partials/sections/text_content_block.html */}}
-<section style="background-color: yellow; color: black; padding: 20px; border: 2px solid red;">
-  <h3 style="color: black;">DEBUG: text_content_block.html PARTIAL LOADED</h3>
-  
-  <h4 style="color: black;">Section Title from Param: {{ .title | default "NO TITLE PARAM" }}</h4>
+    {{/* layouts/partials/sections/text_content_block.html */}}
+    {{ $section_padding := "pa3 pa5-ns" }}
+    {{ $text_color := "near-black" }}
+    {{ $title_size := "f3 f2-m f1-l" }}
+    {{ $content_container_classes := "measure-wide center" }} <!-- Or any other classes for styling the content width/alignment -->
+    {{ $content_text_classes := "lh-copy" }} <!-- For line height and copy styling -->
 
-  <h4 style="color: black;">Raw .ContentHTML (via printf "%#v"):</h4>
-  <pre style="background-color:#eee;border:1px solid #ccc;padding:10px;white-space:pre-wrap;word-wrap:break-word; color: black;">{{ printf "%#v" .ContentHTML }}</pre>
-  
-  <h4 style="color: black;">.ContentHTML piped to | safeHTML :</h4>
-  <div style="border:2px solid green; padding:10px; background-color: white; color: black;">
-    {{ .ContentHTML | safeHTML }}
-  </div>
-
-  <h4 style="color: black;">Checking if .ContentHTML is nil:</h4>
-  <p style="color: black;">Is .ContentHTML nil? {{ if not .ContentHTML }}YES, it's nil or empty.{{ else }}NO, it has a value.{{ end }}</p>
-
-  <h4 style="color: black;">Directly outputting .ContentHTML WITHOUT safeHTML (will likely show escaped HTML if it's a string):</h4>
-  <div style="border:2px solid orange; padding:10px; background-color: white; color: black;">
-    {{ .ContentHTML }}
-  </div>
-</section>
+    <section class="{{ $section_padding }} {{ $text_color }} text-content-block">
+      <div class="{{ $content_container_classes }}">
+        {{ if .title }}
+          <h2 class="{{ $title_size }} tc mb4">{{ .title }}</h2>
+        {{ end }}
+        {{ if .ContentHTML }}
+          <div class="post-content e-content {{ $content_text_classes }}">
+            {{ .ContentHTML | safeHTML }}
+          </div>
+        {{ else if .description }} {{/* Fallback to description if no ContentHTML */}}
+          <p class="{{ $content_text_classes }}">{{ .description | markdownify }}</p>
+        {{ else }}
+          <p class="tc i {{ $content_text_classes }}">(Content for this block is missing)</p>
+        {{ end }}
+      </div>
+    </section>
