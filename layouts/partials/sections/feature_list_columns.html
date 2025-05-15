@@ -1,0 +1,18 @@
+{{/* Section Type: feature_list_columns */}}
+{{/* Expects: .title (optional), .items (array of objects with .icon, .title, .description), .id (optional) */}}
+<section id="{{ .id | default (.type | anchorize) }}" class="{{ .type }} pv4 ph3">
+  <div class="mw8 center">
+    {{ with .title }}<h2 class="f2 tc-l tracked-tight near-black mv0 mb4">{{ . }}</h2>{{ end }}
+    <div class="cf nl2 nr2"> {{/* Negative margins to counteract pa2 on items for edge alignment */}}
+      {{ range .items }}
+        <div class="fl w-100 w-third-l pa2">
+          <div class="bg-white pa3 br2 shadow-4 tc h-100"> {{/* Using Ananke's shadow classes, ensure h-100 for equal height */}}
+            {{ with .icon }}<i class="{{ . }} f1 primary mb2 dib"></i>{{ end }} {{/* Increased icon size */}}
+            <h3 class="f4 mv0 tracked-tight near-black">{{ .title | default "Untitled Feature" }}</h3>
+            {{ with .description }}<p class="f6 lh-copy mid-gray measure mt2">{{ . }}</p>{{ end }}
+          </div>
+        </div>
+      {{ end }}
+    </div>
+  </div>
+</section>
