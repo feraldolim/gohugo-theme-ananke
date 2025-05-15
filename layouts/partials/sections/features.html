@@ -1,15 +1,14 @@
 {{/* layouts/partials/sections/features.html */}}
 <div style="background-color: orange; color: black; padding: 10px; border: 3px solid darkred; margin-bottom:10px;">
   <h4 style="margin-top:0;">DEBUGGING CONTEXT for features partial (ID: {{ .id | default "UNKNOWN" }})</h4>
-  <p>Direct access to .style: [{{ .style }}]</p>
+  <p>Direct access to .Style (capitalized): [{{ .Style }}]</p>  {{/* MODIFIED HERE */}}
   <p>Direct access to .id: [{{ .id }}]</p>
   <p>Direct access to .title: [{{ .title }}]</p>
   <p>Available top-level keys in current context (.):</p>
   <pre style="background-color:#fff; border:1px solid #ccc; padding:5px; white-space:pre-wrap;">{{ printf "%#v" . }}</pre>
 </div>
 
-{{/* ... rest of your existing features.html content ... */}}
-{{ $styleToUse := .style }} {{/* Store it in a variable for robustness */}}
+{{ $styleToUse := .Style }} {{/* MODIFIED HERE - use capitalized Style */}}
 
 <section id="{{ .id | default "features" }}" class="features pa3 pa5-ns">
   <div class="container mw9 center">
