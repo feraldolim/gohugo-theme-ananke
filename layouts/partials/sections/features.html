@@ -1,35 +1,47 @@
-   {{/* layouts/partials/sections/features.html */}}
-<p style="background-color: pink; color: black; padding: 5px;">DEBUG: Received style = [{{ .style }}], Received id = [{{ .id }}]</p>
+{{/* layouts/partials/sections/features.html */}}
+<div style="background-color: orange; color: black; padding: 10px; border: 3px solid darkred; margin-bottom:10px;">
+  <h4 style="margin-top:0;">DEBUGGING CONTEXT for features partial (ID: {{ .id | default "UNKNOWN" }})</h4>
+  <p>Direct access to .style: [{{ .style }}]</p>
+  <p>Direct access to .id: [{{ .id }}]</p>
+  <p>Direct access to .title: [{{ .title }}]</p>
+  <p>Available top-level keys in current context (.):</p>
+  <pre style="background-color:#fff; border:1px solid #ccc; padding:5px; white-space:pre-wrap;">{{ printf "%#v" . }}</pre>
+</div>
 
-   <section id="{{ .id | default "features" }}" class="features pa3 pa5-ns">
-     <div class="container mw9 center">
-       {{ with .title }}<h2 class="f2 tc mb4">{{ . }}</h2>{{ end }}
-       {{ with .description }}<p class="f4 tc measure-wide center lh-copy mb4">{{ . }}</p>{{ end }}
+{{/* ... rest of your existing features.html content ... */}}
+{{ $styleToUse := .style }} {{/* Store it in a variable for robustness */}}
 
-       {{ if eq .style "grid_3_column" }}
-         <div class="flex-ns flex-wrap justify-around">
-           {{ range .items }}
-             <div class="w-100 w-third-ns pa3 tc">
-               {{ with .icon }}<i class="fas fa-{{ . }} fa-3x mb2"></i>{{ end }} {{/* Assuming Font Awesome icons */}}
-               {{ with .title }}<h3 class="f4">{{ . }}</h3>{{ end }}
-               {{ with .text }}<p class="lh-copy measure-narrow center">{{ . }}</p>{{ end }}
-             </div>
-           {{ end }}
-         </div>
-       {{ else if eq .style "list_icon_left" }}
-         <ul class="list pl0">
-           {{ range .items }}
-             <li class="flex items-center lh-copy pa3 ph0-l bb b--black-10">
-               {{ with .icon }}<i class="fas fa-{{ . }} fa-2x mr3"></i>{{ end }} {{/* Assuming Font Awesome icons */}}
-               <div class="pl3 flex-auto">
-                 {{ with .title }}<span class="f4 db black-70">{{ . }}</span>{{ end }}
-                 {{ with .text }}<span class="f6 db black-70">{{ . }}</span>{{ end }}
-               </div>
-             </li>
-           {{ end }}
-         </ul>
-       {{ else }}
-         <p class="tc i"><em>Unhandled feature style: {{ .style | default "none" }}</em></p>
-       {{ end }}
-     </div>
-   </section>
+<section id="{{ .id | default "features" }}" class="features pa3 pa5-ns">
+  <div class="container mw9 center">
+    {{ with .title }}<h2 class="f2 tc mb4">{{ . }}</h2>{{ end }}
+    {{ with .description }}<p class="f4 tc measure-wide center lh-copy mb4">{{ . }}</p>{{ end }}
+
+    {{ if eq $styleToUse "grid_3_column" }}
+      <p style="color: green; font-weight: bold;">Rendering as grid_3_column</p>
+      <div class="flex-ns flex-wrap justify-around">
+        {{ range .items }}
+          <div class="w-100 w-third-ns pa3 tc">
+            {{ with .icon }}<i class="fas fa-{{ . }} fa-3x mb2"></i>{{ end }}
+            {{ with .title }}<h3 class="f4">{{ . }}</h3>{{ end }}
+            {{ with .text }}<p class="lh-copy measure-narrow center">{{ . }}</p>{{ end }}
+          </div>
+        {{ end }}
+      </div>
+    {{ else if eq $styleToUse "list_icon_left" }}
+      <p style="color: blue; font-weight: bold;">Rendering as list_icon_left</p>
+      <ul class="list pl0">
+        {{ range .items }}
+          <li class="flex items-center lh-copy pa3 ph0-l bb b--black-10">
+            {{ with .icon }}<i class="fas fa-{{ . }} fa-2x mr3"></i>{{ end }}
+            <div class="pl3 flex-auto">
+              {{ with .title }}<span class="f4 db black-70">{{ . }}</span>{{ end }}
+              {{ with .text }}<span class="f6 db black-70">{{ . }}</span>{{ end }}
+            </div>
+          </li>
+        {{ end }}
+      </ul>
+    {{ else }}
+      <p class="tc i"><em>Unhandled feature style: [{{ $styleToUse | default "none" }}]. Items data: {{ printf "%#v" .items }}</em></p>
+    {{ end }}
+  </div>
+</section>
