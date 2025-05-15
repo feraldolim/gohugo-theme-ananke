@@ -1,42 +1,88 @@
 {{ define "main" }}
-  <article class="cf ph3 ph5-l pv3 pv4-l f4 tc-l center measure-wide lh-copy nested-links {{ $.Param "text_color" | compare.Default "mid-gray" }}">
-    {{ .Content }}
-  </article>
+  <article class="pa3 pa4-ns nested-copy-line-height nested-links">
+    <section class="cf ph3 ph5-l pv3 pv4-l f4 tc-l center measure-wide lh-copy mid-gray">
+      {{/* You can uncomment the line below if you want to render Markdown content directly from _index.md's body */}}
+      {{ .Content }}
+    </section>
 
-  {{/* Define a section to pull recent posts from. For Hugo 0.20 this will default to the section with the most number of pages. */}}
-  {{ $mainSections := site.Params.mainSections | compare.Default (collections.Slice "post") }}
-  {{ $show_recent_posts := site.Params.ananke.show_recent_posts }}
-  {{ $section := collections.Where $.Site.RegularPages "Section" "in" $mainSections }}
-  {{ $section_count := len $section }}
-
-  {{ if and ($show_recent_posts) (compare.Ge $section_count 1) }}
-    <div class="pa3 pa4-ns w-100 w-70-ns center">
-      {{ $n_posts := $.Param "recent_posts_number" | compare.Default 3 }}
-
-      <section class="w-100 mw8">
-        {{/* Range through the first $n_posts items of the section */}}
-        {{ range (collections.First $n_posts $section) }}
-          <div class="w-100 mb4 relative">
-            {{ .Render "summary-with-image" }}
-          </div>
-        {{ end }}
-      </section>
-
-      {{ if compare.Ge $section_count (math.Add $n_posts 1) }}
-        <section class="w-100">
-          <h1 class="f3">{{ lang.Translate "more" }}</h1>
-          {{/* Now, range through the next four after the initial $n_posts items. Nest the requirements, "after" then "first" on the outside */}}
-          {{ range (collections.First 4 (collections.After $n_posts $section))  }}
-            <h2 class="f5 fw4 mb4 dib {{ compare.Conditional (compare.Eq $.Site.Language.LanguageDirection "rtl") "ml3" "mr3" }}">
-              <a href="{{ .RelPermalink }}" class="link black dim">
-                {{ .Title }}
-              </a>
-            </h2>
-          {{ end }}
-        </section>
+    {{/* Featured image logic from Ananke */}}
+    {{ $featured_image := .Params.featured_image }}
+    {{ if $featured_image }}
+      {{/* Try to get it as a page resource first */}}
+      {{ $image := "" }}
+      {{ if not (strings.HasPrefix $featured_image "http") }}
+        {{ $image = .Resources.GetMatch $featured_image }}
       {{ end }}
 
-    </div>
-  {{ end }}
-{{ end }}
+      {{ if $image }}
+        {{ $image_resized := $image.Fill "1200x600 webp" }}
+        <header class="cover bg-top" style="background-image: url('{{ $image_resized.RelPermalink }}');">
+          <div class="pb3-m pb6-l ph3 ph4-ns">
+            <h1 class="f1-l f2 lh-solid white tracked-tight mv0">{{ .Title }}</h1>
+            {{ with .Params.description }}
+              <h2 class="f5 fw1 lh-copy white o-80 measure-wide">{{ . }}</h2>
+            {{ end }}
+          </div>
+        </header>
+      {{ else if (strings.HasPrefix $featured_image "http") }}
+         {{/* Fallback for external featured_image URL */}}
+        <header class="cover bg-top" style="background-image: url('{{ $featured_image | safeURL }}');">
+          <div class="pb3-m pb6-l ph3 ph4-ns">
+            <h1 class="f1-l f2 lh-solid white tracked-tight mv0">{{ .Title }}</h1>
+            {{ with .Params.description }}
+              <h2 class="f5 fw1 lh-copy white o-80 measure-wide">{{ . }}</h2>
+            {{ end }}
+          </div>
+        </header>
+      {{ else }}
+        {{/* Fallback if featured_image is specified but not found and not a full URL */}}
+        <header>
+          <div class="pb3-m pb6-l ph3 ph4-ns tc">
+             <h1 class="f1-l f2 lh-solid tracked-tight mv0">{{ .Title }}</h1>
+             {{ with .Params.description }}
+               <h2 class="f5 fw1 lh-copy o-80 measure-wide">{{ . }}</h2>
+             {{ end }}
+             <p class="f6 dark-red">Featured image '{{ $featured_image }}' not found or not a valid URL.</p>
+          </div>
+        </header>
+      {{ end }}
+    {{ else }}
+      {{/* No featured image, just text header */}}
+      <header>
+        <div class="pb3-m pb6-l ph3 ph4-ns tc">
+          <h1 class="f1-l f2 lh-solid tracked-tight mv0">{{ .Title }}</h1>
+          {{ with .Params.description }}
+            <h2 class="f5 fw1 lh-copy o-80 measure-wide">{{ . }}</h2>
+          {{ end }}
+        </div>
+      </header>
+    {{ end }}
 
+    {{/* Section Rendering Loop */}}
+    {{ if .Params.sections }}
+      <div class="content-sections">
+        {{ range .Params.sections }}
+          {{ $partial_path := printf "sections/%s.html" .type }}
+          {{ if templates.Exists (printf "partials/%s" $partial_path) }}
+            {{ partial $partial_path . }}
+          {{ else }}
+            <div class="pa4 tc ba b--dashed bw1 b--light-red bg-washed-red">
+              <p class="f5 measure-wide lh-copy mid-gray">
+                <strong>Theme Developer Note:</strong> The partial for section type '<code>{{ .type }}</code>' (expected at <code>layouts/partials/{{ $partial_path }}</code>) is missing.
+                <br>This section cannot be displayed until the partial is created.
+              </p>
+              <p class="f7 tl code bg-light-gray pa2 br2">Data for this section:<br><pre>{{ printf "%#v" . }}</pre></p>
+            </div>
+          {{ end }}
+        {{ end }}
+      </div>
+    {{ else }}
+        {{/* If there are no sections, and you uncommented .Content above, that will show. */}}
+        {{/* Otherwise, you might want a default message or just let it be blank under the header. */}}
+        <section class="cf ph3 ph5-l pv3 pv4-l f4 tc-l center measure-wide lh-copy mid-gray">
+          <p><em>No sections defined for this page. Edit the front matter to add content sections.</em></p>
+        </section>
+    {{ end }}
+
+  </article>
+{{ end }}
