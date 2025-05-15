@@ -1,7 +1,8 @@
 {{/* layouts/partials/sections/features.html */}}
 <div style="background-color: orange; color: black; padding: 10px; border: 3px solid darkred; margin-bottom:10px;">
   <h4 style="margin-top:0;">DEBUGGING CONTEXT for features partial (ID: {{ .id | default "UNKNOWN" }})</h4>
-  <p>Direct access to .Style (capitalized): [{{ .Style }}]</p>  {{/* MODIFIED HERE */}}
+  <p>Direct access to .Style (capitalized) via index: [{{ index . "style" }}]</p>
+{{ $styleToUse := index . "style" }}
   <p>Direct access to .id: [{{ .id }}]</p>
   <p>Direct access to .title: [{{ .title }}]</p>
   <p>Available top-level keys in current context (.):</p>
@@ -15,10 +16,10 @@
     {{ with .title }}<h2 class="f2 tc mb4">{{ . }}</h2>{{ end }}
     {{ with .description }}<p class="f4 tc measure-wide center lh-copy mb4">{{ . }}</p>{{ end }}
 
-    {{ if eq $styleToUse "grid_3_column" }}
+        {{ if eq $styleToUse "grid_3_column" }}
       <p style="color: green; font-weight: bold;">Rendering as grid_3_column</p>
       <div class="flex-ns flex-wrap justify-around">
-        {{ range .items }}
+        {{ range (index . "items") }}  {{/* MODIFIED HERE */}}
           <div class="w-100 w-third-ns pa3 tc">
             {{ with .icon }}<i class="fas fa-{{ . }} fa-3x mb2"></i>{{ end }}
             {{ with .title }}<h3 class="f4">{{ . }}</h3>{{ end }}
@@ -29,7 +30,7 @@
     {{ else if eq $styleToUse "list_icon_left" }}
       <p style="color: blue; font-weight: bold;">Rendering as list_icon_left</p>
       <ul class="list pl0">
-        {{ range .items }}
+        {{ range (index . "items") }} {{/* MODIFIED HERE */}}
           <li class="flex items-center lh-copy pa3 ph0-l bb b--black-10">
             {{ with .icon }}<i class="fas fa-{{ . }} fa-2x mr3"></i>{{ end }}
             <div class="pl3 flex-auto">
@@ -40,7 +41,7 @@
         {{ end }}
       </ul>
     {{ else }}
-      <p class="tc i"><em>Unhandled feature style: [{{ $styleToUse | default "none" }}]. Items data: {{ printf "%#v" .items }}</em></p>
+      <p class="tc i"><em>Unhandled feature style: [{{ $styleToUse | default "none" }}]. Items data: {{ printf "%#v" (index . "items") }}</em></p>
     {{ end }}
   </div>
 </section>
