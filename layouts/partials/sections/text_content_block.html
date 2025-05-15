@@ -1,0 +1,10 @@
+{{/* Section Type: text_content_block */}}
+{{/* Expects: .title (optional), .content_html, .id (optional) */}}
+<section id="{{ .id | default (.type | anchorize) }}" class="{{ .type }} pv4 ph3">
+  <div class="mw7 center article-style"> {{/* Added article-style for potential typography matching */}}
+    {{ with .title }}<h2 class="f2 tc-l tracked-tight near-black mv0 mb3">{{ . }}</h2>{{ end }}
+    <div class="lh-copy mid-gray measure-wide">
+      {{ .content_html | safeHTML }}
+    </div>
+  </div>
+</section>
