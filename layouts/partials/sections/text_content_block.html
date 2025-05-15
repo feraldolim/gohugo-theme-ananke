@@ -1,25 +1,24 @@
-{{/* Section Type: text_content_block */}}
-{{/* Expects: .title (optional), .content_html, .id (optional) */}}
-<section id="{{ .id | default (.type | anchorize) }}" class="{{ .type }} pv4 ph3">
-  <div class="mw7 center">
-    {{ with .title }}
-      <h2 class="f2 tc-l tracked-tight near-black mv0 mb3">{{ . }}</h2>
-    {{ end }}
-    <div class="prose ethanwaggoner-prose nested-copy-line-height nested-links mid-gray">
-      <p>This is <strong>hardcoded HTML</strong> directly in the partial. Does THIS render?</p>
-      <ul>
-        <li>Hardcoded item 1</li>
-        <li>Hardcoded item 2</li>
-      </ul>
-      <hr>
-      <p><strong>Attempting to render content_html:</strong></p>
-      <p>Value of .content_html (raw, before safeHTML):</p>
-      <pre style="background-color: #f0f0f0; border: 1px solid #ccc; padding: 10px; white-space: pre-wrap; word-wrap: break-word;">{{ .content_html }}</pre>
-      <p>Value of .content_html (after safeHTML attempt):</p>
-      <div style="border: 1px dashed blue; padding: 10px;">
-        {{ .content_html | safeHTML }}
-      </div>
-      <hr>
+{{/* layouts/partials/sections/text_content_block.html */}}
+<section class="pa3 pa5-ns text-content-block">
+  <h2 class="f3 f2-m f1-l tc">{{ .title | default "Text Content Block Title" }}</h2>
+  {{ if .content_html }}
+    <div class="post-content e-content">
+      {{ .content_html | safeHTML }}
     </div>
+  {{ else }}
+    <p class="tc"><em>(No content_html provided for this block)</em></p>
+  {{ end }}
+
+  {{/* --- Previous Debugging - Can be removed or kept for now --- */}}
+  <hr>
+  <p>Attempting to render content_html:</p>
+  <p>Value of .content_html (raw, before safeHTML):</p>
+  <pre style="background-color:#f0f0f0;border:1px solid #ccc;padding:10px;white-space:pre-wrap;word-wrap:break-word">{{ printf "%#v" .content_html }}</pre>
+  <p>Value of .content_html (after safeHTML attempt):</p>
+  <div style="border:1px dashed blue;padding:10px">
+      {{ .content_html | safeHTML }}
   </div>
+  <hr>
+  {{/* --- End Previous Debugging --- */}}
+
 </section>
