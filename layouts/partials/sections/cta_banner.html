@@ -1,0 +1,10 @@
+{{/* Section Type: cta_banner */}}
+{{/* Expects: .headline (optional), .ctaText (optional), .ctaUrl (optional), .id (optional) */}}
+<section id="{{ .id | default (.type | anchorize) }}" class="{{ .type }} pv4 ph3 bg-primary tc">
+  <div class="mw7 center pa3">
+    {{ with .headline }}<h2 class="f2-l f3 lh-solid white tracked-tight mv0">{{ . }}</h2>{{ end }}
+    {{ if and .ctaText .ctaUrl }}
+      <a class="f5 link dim br-pill ph3 pv2 mv3 dib near-black bg-white shadow-4" href="{{ .ctaUrl | safeURL }}">{{ .ctaText }}</a>
+    {{ end }}
+  </div>
+</section>
