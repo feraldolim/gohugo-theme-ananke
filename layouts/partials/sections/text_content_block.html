@@ -5,9 +5,13 @@
     {{ with .title }}
       <h2 class="f2 tc-l tracked-tight near-black mv0 mb3">{{ . }}</h2>
     {{ end }}
-    {{/* Attempt to use Ananke's prose styling classes */}}
     <div class="prose ethanwaggoner-prose nested-copy-line-height nested-links mid-gray">
-      {{ .content_html | safeHTML }}
+      <p>This is <strong>hardcoded HTML</strong> directly in the partial. Does THIS render?</p>
+      <ul>
+        <li>Hardcoded item 1</li>
+        <li>Hardcoded item 2</li>
+      </ul>
+      <p>Content from variable: {{ .content_html | safeHTML }}</p> {{/* Keep this for comparison */}}
     </div>
   </div>
 </section>
