@@ -1,0 +1,41 @@
+{{/* layouts/partials/sections/footer.html */}}
+{{ $sectionData := . }}
+
+<footer id="{{ index $sectionData "id" | default "footer" }}" class="footer pa4 tc tl-ns bg-near-black white">
+  <div class="container mw9 center">
+    <div class="flex-ns justify-between items-center">
+      
+      {{/* Copyright Text */}}
+      <div class="mb3 mb0-ns">
+        {{ with (index $sectionData "CopyrightText") }}
+          <p class="f6 lh-copy ma0">&copy; {{ . }}</p>
+        {{ else }}
+          <p class="f6 lh-copy ma0">&copy; {{ .Site.Title }} {{ now.Format "2006" }}</p> {{/* Fallback */}}
+        {{ end }}
+      </div>
+
+      {{/* Navigation Links - Assuming "Links" is an array of maps with "Text" and "Url" */}}
+      {{ with (index $sectionData "Links") }}
+        <nav class="mb3 mb0-ns">
+          {{ range . }}
+            {{ with (index . "Url") }}<a href="{{ . }}" class="link white-70 hover-white f6 ph2 dib">{{ index $. "Text" | default "Link" }}</a>{{ end }}
+          {{ end }}
+        </nav>
+      {{ end }}
+
+      {{/* Social Media Links - Assuming "SocialMedia" is an array of maps with "Platform" (icon name) and "Url" */}}
+      {{ with (index $sectionData "SocialMedia") }}
+        <div class="social-links">
+          {{ range . }}
+            {{ with (index . "Url") }}
+              <a href="{{ . }}" class="link white-70 hover-white f4 ph2 dib" aria-label="{{ index $. "Platform" | default "Social Media" }}">
+                <i class="fab fa-{{ index $. "Platform" | lower }}"></i> {{/* Assuming Font Awesome brands */}}
+              </a>
+            {{ end }}
+          {{ end }}
+        </div>
+      {{ end }}
+
+    </div>
+  </div>
+</footer>
