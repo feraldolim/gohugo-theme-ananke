@@ -1,24 +1,23 @@
 {{/* layouts/partials/sections/text_content_block.html */}}
-<section class="pa3 pa5-ns text-content-block">
-  <h2 class="f3 f2-m f1-l tc">{{ .title | default "Text Content Block Title" }}</h2>
-  {{ if .content_html }}
-    <div class="post-content e-content">
-      {{ .content_html | safeHTML }}
-    </div>
-  {{ else }}
-    <p class="tc"><em>(No content_html provided for this block)</em></p>
-  {{ end }}
+<section style="background-color: yellow; color: black; padding: 20px; border: 2px solid red;">
+  <h3 style="color: black;">DEBUG: text_content_block.html PARTIAL LOADED</h3>
+  
+  <h4 style="color: black;">Section Title from Param: {{ .title | default "NO TITLE PARAM" }}</h4>
 
-  {{/* --- Previous Debugging - Can be removed or kept for now --- */}}
-  <hr>
-  <p>Attempting to render content_html:</p>
-  <p>Value of .content_html (raw, before safeHTML):</p>
-  <pre style="background-color:#f0f0f0;border:1px solid #ccc;padding:10px;white-space:pre-wrap;word-wrap:break-word">{{ printf "%#v" .content_html }}</pre>
-  <p>Value of .content_html (after safeHTML attempt):</p>
-  <div style="border:1px dashed blue;padding:10px">
-      {{ .content_html | safeHTML }}
+  <h4 style="color: black;">Raw .content_html (via printf "%#v"):</h4>
+  <pre style="background-color:#eee;border:1px solid #ccc;padding:10px;white-space:pre-wrap;word-wrap:break-word; color: black;">{{ printf "%#v" .content_html }}</pre>
+  
+  <h4 style="color: black;">.content_html piped to | safeHTML :</h4>
+  <div style="border:2px solid green; padding:10px; background-color: white; color: black;">
+    {{ .content_html | safeHTML }}
   </div>
-  <hr>
-  {{/* --- End Previous Debugging --- */}}
+
+  <h4 style="color: black;">Checking if .content_html is nil:</h4>
+  <p style="color: black;">Is .content_html nil? {{ if not .content_html }}YES, it's nil or empty.{{ else }}NO, it has a value.{{ end }}</p>
+
+  <h4 style="color: black;">Directly outputting .content_html WITHOUT safeHTML (will likely show escaped HTML if it's a string):</h4>
+  <div style="border:2px solid orange; padding:10px; background-color: white; color: black;">
+    {{ .content_html }}
+  </div>
 
 </section>
