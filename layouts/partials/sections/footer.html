@@ -5,31 +5,32 @@
   <div class="container mw9 center">
     <div class="flex-ns justify-between items-center">
       
-      {{/* Copyright Text */}}
       <div class="mb3 mb0-ns">
         {{ with (index $sectionData "CopyrightText") }}
-          <p class="f6 lh-copy ma0">&copy; {{ . }}</p>
+          <p class="f6 lh-copy ma0">{{ . }}</p>
         {{ else }}
-          <p class="f6 lh-copy ma0">&copy; {{ .Site.Title }} {{ now.Format "2006" }}</p> {{/* Fallback */}}
+          <p class="f6 lh-copy ma0">&copy; {{ .Site.Title }} {{ now.Format "2006" }}</p>
         {{ end }}
       </div>
 
-      {{/* Navigation Links - Assuming "Links" is an array of maps with "Text" and "Url" */}}
       {{ with (index $sectionData "Links") }}
         <nav class="mb3 mb0-ns">
-          {{ range . }}
-            {{ with (index . "Url") }}<a href="{{ . }}" class="link white-70 hover-white f6 ph2 dib">{{ index $. "Text" | default "Link" }}</a>{{ end }}
+          {{ range . }} {{/* . is an individual link map */}}
+            {{ $link := . }} {{/* Store current link map in a variable */}}
+            {{ with (index $link "Url") }}
+              <a href="{{ . }}" class="link white-70 hover-white f6 ph2 dib">{{ index $link "Text" | default "Link" }}</a>
+            {{ end }}
           {{ end }}
         </nav>
       {{ end }}
 
-      {{/* Social Media Links - Assuming "SocialMedia" is an array of maps with "Platform" (icon name) and "Url" */}}
       {{ with (index $sectionData "SocialMedia") }}
         <div class="social-links">
-          {{ range . }}
-            {{ with (index . "Url") }}
-              <a href="{{ . }}" class="link white-70 hover-white f4 ph2 dib" aria-label="{{ index $. "Platform" | default "Social Media" }}">
-                <i class="fab fa-{{ index $. "Platform" | lower }}"></i> {{/* Assuming Font Awesome brands */}}
+          {{ range . }} {{/* . is an individual social map */}}
+            {{ $socialItem := . }} {{/* Store current social map in a variable */}}
+            {{ with (index $socialItem "Url") }}
+              <a href="{{ . }}" class="link white-70 hover-white f4 ph2 dib" aria-label='{{ index $socialItem "Platform" | default "Social Media" }}'>
+                <i class="fab fa-{{ index $socialItem "Platform" | lower }}"></i>
               </a>
             {{ end }}
           {{ end }}
