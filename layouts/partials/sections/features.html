@@ -1,47 +1,49 @@
 {{/* layouts/partials/sections/features.html */}}
+{{ $rawStyle := index . "style" }}
+{{ $styleToUse := trim $rawStyle " \n\r\t" }} {{/* Trim whitespace */}}
+
 <div style="background-color: orange; color: black; padding: 10px; border: 3px solid darkred; margin-bottom:10px;">
-  <h4 style="margin-top:0;">DEBUGGING CONTEXT for features partial (ID: {{ .id | default "UNKNOWN" }})</h4>
-  <p>Direct access to .Style (capitalized) via index: [{{ index . "style" }}]</p>
-{{ $styleToUse := index . "style" }}
-  <p>Direct access to .id: [{{ .id }}]</p>
-  <p>Direct access to .title: [{{ .title }}]</p>
+  <h4 style="margin-top:0;">DEBUGGING CONTEXT for features partial (ID: {{ index . "id" | default "UNKNOWN" }})</h4>
+  <p>Raw .style (via index): [{{ $rawStyle }}]</p>
+  <p>Trimmed .style (styleToUse): [{{ $styleToUse }}]</p>
+  <p>Length of styleToUse: [{{ len $styleToUse }}]</p>
+  <p>Is styleToUse eq "grid_3_column"? [{{ eq $styleToUse "grid_3_column" }}]</p>
+  <p>Is styleToUse eq "list_icon_left"? [{{ eq $styleToUse "list_icon_left" }}]</p>
   <p>Available top-level keys in current context (.):</p>
   <pre style="background-color:#fff; border:1px solid #ccc; padding:5px; white-space:pre-wrap;">{{ printf "%#v" . }}</pre>
 </div>
 
-{{ $styleToUse := .Style }} {{/* MODIFIED HERE - use capitalized Style */}}
-
-<section id="{{ .id | default "features" }}" class="features pa3 pa5-ns">
+<section id="{{ index . "id" | default "features" }}" class="features pa3 pa5-ns">
   <div class="container mw9 center">
-    {{ with .title }}<h2 class="f2 tc mb4">{{ . }}</h2>{{ end }}
-    {{ with .description }}<p class="f4 tc measure-wide center lh-copy mb4">{{ . }}</p>{{ end }}
+    {{ with (index . "title") }}<h2 class="f2 tc mb4">{{ . }}</h2>{{ end }}
+    {{ with (index . "description") }}<p class="f4 tc measure-wide center lh-copy mb4">{{ . }}</p>{{ end }}
 
-        {{ if eq $styleToUse "grid_3_column" }}
+    {{ if eq $styleToUse "grid_3_column" }}
       <p style="color: green; font-weight: bold;">Rendering as grid_3_column</p>
       <div class="flex-ns flex-wrap justify-around">
-        {{ range (index . "items") }}  {{/* MODIFIED HERE */}}
+        {{ range (index . "items") }}
           <div class="w-100 w-third-ns pa3 tc">
-            {{ with .icon }}<i class="fas fa-{{ . }} fa-3x mb2"></i>{{ end }}
-            {{ with .title }}<h3 class="f4">{{ . }}</h3>{{ end }}
-            {{ with .text }}<p class="lh-copy measure-narrow center">{{ . }}</p>{{ end }}
+            {{ with (index . "icon") }}<i class="fas fa-{{ . }} fa-3x mb2"></i>{{ end }}
+            {{ with (index . "title") }}<h3 class="f4">{{ . }}</h3>{{ end }}
+            {{ with (index . "text") }}<p class="lh-copy measure-narrow center">{{ . }}</p>{{ end }}
           </div>
         {{ end }}
       </div>
     {{ else if eq $styleToUse "list_icon_left" }}
       <p style="color: blue; font-weight: bold;">Rendering as list_icon_left</p>
       <ul class="list pl0">
-        {{ range (index . "items") }} {{/* MODIFIED HERE */}}
+        {{ range (index . "items") }}
           <li class="flex items-center lh-copy pa3 ph0-l bb b--black-10">
-            {{ with .icon }}<i class="fas fa-{{ . }} fa-2x mr3"></i>{{ end }}
+            {{ with (index . "icon") }}<i class="fas fa-{{ . }} fa-2x mr3"></i>{{ end }}
             <div class="pl3 flex-auto">
-              {{ with .title }}<span class="f4 db black-70">{{ . }}</span>{{ end }}
-              {{ with .text }}<span class="f6 db black-70">{{ . }}</span>{{ end }}
+              {{ with (index . "title") }}<span class="f4 db black-70">{{ . }}</span>{{ end }}
+              {{ with (index . "text") }}<span class="f6 db black-70">{{ . }}</span>{{ end }}
             </div>
           </li>
         {{ end }}
       </ul>
     {{ else }}
-      <p class="tc i"><em>Unhandled feature style: [{{ $styleToUse | default "none" }}]. Items data: {{ printf "%#v" (index . "items") }}</em></p>
+      <p class="tc i"><em>Unhandled feature style: [{{ $styleToUse | default "none" }}]. Expected 'grid_3_column' (len 15) or 'list_icon_left' (len 16). Got len [{{ len $styleToUse }}]. Items data: {{ printf "%#v" (index . "items") }}</em></p>
     {{ end }}
   </div>
 </section>
