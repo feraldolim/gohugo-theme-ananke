@@ -1,0 +1,38 @@
+{{/* layouts/partials/sections/contact_form.html */}}
+{{ $sectionData := . }}
+
+<section id="{{ index $sectionData "id" | default "contact" }}" class="contact-form pa3 pa5-ns">
+  <div class="container mw7 center">
+    {{ with (index $sectionData "Title") }}
+      <h2 class="f2 tc mb3">{{ . }}</h2>
+    {{ end }}
+    {{ with (index $sectionData "Description") }}
+      <p class="f4 tc measure-wide center lh-copy mb4">{{ . }}</p>
+    {{ end }}
+
+    {{/* Replace with your actual form handler URL or a service like Formspree/Netlify Forms */}}
+    <form class="measure center" action="YOUR_FORM_ACTION_URL_HERE" method="POST"> 
+      {{ range (index $sectionData "FormFields") }}
+        {{ $fieldData := . }}
+        <div class="mb3">
+          <label for="{{ index $fieldData "name" }}" class="f6 b db mb2">
+            {{ index $fieldData "label" }}
+            {{ if (index $fieldData "required") }}<span class="normal black-60">(required)</span>{{ end }}
+          </label>
+          {{ if eq (index $fieldData "type") "textarea" }}
+            <textarea id="{{ index $fieldData "name" }}" name="{{ index $fieldData "name" }}" class="db border-box hover-black w-100 measure ba b--black-20 pa2 br2 mb2" rows="4" {{ if (index $fieldData "required") }}required{{ end }}></textarea>
+          {{ else }}
+            <input id="{{ index $fieldData "name" }}" name="{{ index $fieldData "name" }}" type="{{ index $fieldData "type" | default "text" }}" class="input-reset ba b--black-20 pa2 mb2 db w-100" {{ if (index $fieldData "required") }}required{{ end }}>
+          {{ end }}
+        </div>
+      {{ end }}
+
+      <div>
+        <input class="f6 link dim br2 ph3 pv2 mb2 dib white bg-blue pointer" type="submit" value="{{ index $sectionData "SubmitButtonText" | default "Submit" }}">
+      </div>
+    </form>
+    {{ with (index $sectionData "EmailTo" )}}
+        <p class="tc f6 black-60 mt3">Or email us directly at: {{ . }}</p>
+    {{ end }}
+  </div>
+</section>
